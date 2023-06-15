@@ -5,26 +5,24 @@ Requires Go 1.20
 
 Currently supports gathering metrics for:
 * Package loading:
-    - R `Load` in `golang.org/x/tools/go/packages`
+    - Replace all calls to `Load` in `golang.org/x/tools/go/packages`
 * SSA construction:
     - Replace all calls to `AllPackages`  in `golang.org/x/tools/go/ssautil` with `stamets.AllPackages`
 * Standard Points-To Analysis (PTA).
     - Replace all calls to `Analyze` in `golang.org/x/tools/go/pointer` with `stamets.Analyze`
 * Call graph metrics:
-    - Call `GetCallGraphMetrics` by providing a `*callgraph.Graph` value e.g., produced by PTA
+    - Provide `GetCallGraphMetrics` with a `*callgraph.Graph` value e.g., as produced by PTA
 
 For wrappers around existing functions, the result is a metrics aggregator in the form of an appropriately
 typed `Metrics` structure.
 To extract the underlying result (and potential error), use the `Unpack` method.
 
 
-## Infoermation about metrics
+## Collected metrics
 
 Gathered metrics include the following:
 * Execution time
-* **PTA**
-    - Additional metrics are gathered for the sizes of points-to sets of the
-queries included in the PTA results. These include: P50, P90, P99, Maximum size, Predominant points-to set size (mode)
+* **PTA**:  Additional metrics are gathered for the sizes of points-to sets of the queries included in the PTA results. These include: P50, P90, P99, Maximum size, Predominant points-to set size (mode)
 * **Call graphs**
     - **Number of functions**
     - **Out-degree metrics**: P50, P90, P99, Maximum, Predominant out-degree (mode)
@@ -36,12 +34,16 @@ Functions without out-going calls still contribute to out-degree metrics with a 
 ## Example
 
 Replacing a PTA `Analyze` call may be carried out as follows:
-```
+```go
 // Old:
 // 1. Direct call to pointer.Analyze
 ptaResults, err := pointer.Analyze(config)
 
 // New:
+import "github.com/vladsaiocuber/stamets"
+
+...
+
 // 1. Replace pointer.Analyze with stamets.Analyze
 ptaMetrics := stamets.Analyze(config)
 // 2. Unpack original results
@@ -51,8 +53,8 @@ fmt.Println(ptaMetrics)
 ```
 
 The call graph produced by PTA may have its metrics extracted as follows:
-```
-pta, err := stamtes.Analyze(config).Unpack()
+```go
+pta, err := stamets.Analyze(config).Unpack()
 if err != nil {
     return
 }

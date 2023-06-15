@@ -1,4 +1,4 @@
-module go.uber.org/stamets
+module github.com/vladsaiocuber/stamets
 
 go 1.20
 
