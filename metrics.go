@@ -1,6 +1,7 @@
 package stamets
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -12,7 +13,11 @@ type BaseMetrics[T any] struct {
 	Payload T
 }
 
+// Metrics is an interface implemented by all metrics structures.
 type Metrics interface {
+	fmt.Stringer
+	error
+
 	UnpackAny() (any, error)
 	Ok() bool
 }
@@ -33,4 +38,12 @@ func (m BaseMetrics[T]) UnpackAny() (any, error) {
 // Ok checks whether the desired function failed to execute.
 func (m BaseMetrics[T]) Ok() bool {
 	return m.error == nil
+}
+
+func (m BaseMetrics[T]) String() string {
+	return fmt.Sprintf(`
+BASE METRICS:
+- Duration: %fs
+`,
+		m.Duration.Seconds())
 }

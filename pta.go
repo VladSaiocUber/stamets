@@ -25,7 +25,7 @@ type PTAMetrics struct {
 func (m PTAMetrics) String() string {
 	return fmt.Sprintf(`
 PTA METRICS
-- Duration: %f
+- Duration: %fs
 - Number of PTA queries: %d
 - Number of indirect PTA queries: %d
 - P50 points-to set size: %d

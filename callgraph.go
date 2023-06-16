@@ -8,21 +8,36 @@ import (
 	"golang.org/x/tools/go/ssa"
 )
 
+// CallGraphMetrics encodes relevant metrics about a call graph.
+// It primarily revolves around information about out-degrees (per call-site)
+// and in-degrees.
 type CallGraphMetrics struct {
 	BaseMetrics[*callgraph.Graph]
 
-	// Call graph out degree metrics
-	OutDegreeMax  int
-	OutDegreeP50  int
-	OutDegreeP90  int
-	OutDegreeP99  int
+	// OUT-DEGREE METRICS
+
+	// Maximum out-degree across all call sites.
+	OutDegreeMax int
+	// Call site out-degree 50th percentile
+	OutDegreeP50 int
+	// Call site out-degree 90th percentile
+	OutDegreeP90 int
+	// Call site out-degree 99th percentile
+	OutDegreeP99 int
+	// Most common call site out-degree
 	OutDegreeMode int
 
-	// Call graph in degree metrics
-	InDegreeMax  int
-	InDegreeP50  int
-	InDegreeP90  int
-	InDegreeP99  int
+	// IN-DEGREE METRICS
+
+	// Maximum call graph in-degree across all functions.
+	InDegreeMax int
+	// Call graph in-degree 50th percentile
+	InDegreeP50 int
+	// Call graph in-degree 90th percentile
+	InDegreeP90 int
+	// Call graph in-degree 99th percentile
+	InDegreeP99 int
+	// Most common function in-degree
 	InDegreeMode int
 }
 
@@ -57,6 +72,8 @@ Callee in-degree metrics:
 	)
 }
 
+// GetCallGraphMetrics accepts a call graph as input, and wraps it in a
+// metrics structure.
 func GetCallGraphMetrics(cg *callgraph.Graph) CallGraphMetrics {
 	m := CallGraphMetrics{
 		BaseMetrics: BaseMetrics[*callgraph.Graph]{
@@ -139,7 +156,7 @@ func (m CallGraphMetrics) CallGraphInDegreeMetrics() CallGraphMetrics {
 }
 
 // NumberOfFunctions produces the number of functions in the call-graph produced
-// by the Points-To analysis.
+// by the control flow analysis.
 func (m CallGraphMetrics) NumberOfFunctions() int {
 	if m.Payload == nil {
 		return 0
