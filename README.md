@@ -1,6 +1,6 @@
 # STAMETS - STatic Analysis METricS
 
-[![Go Report Card](https://goreportcard.com/report/github.com/vladsaiocuber/stamets)](https://goreportcard.com/report/github.com/vladsaiocuber/stamets) [![PkgGoDev](https://pkg.go.dev/github.com/vladsaiocuber/stamets)](https://pkg.go.dev/github.com/vladsaiocuber/stamets)
+[![Go Report Card](https://goreportcard.com/badge/github.com/vladsaiocuber/stamets)](https://goreportcard.com/report/github.com/vladsaiocuber/stamets) [![Go Reference](https://pkg.go.dev/badge/github.com/VladSaiocUber/stamets.svg)](https://pkg.go.dev/github.com/vladsaiocuber/stamets)
 
 For programming language experts that rely on standard library static analyzers.
 Requires Go 1.20
