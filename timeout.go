@@ -5,7 +5,9 @@ import (
 	"time"
 )
 
-// TaskWithTimeout performs a task with collectible metrics
+// TaskWithTimeout performs a task with collectible metrics in the alloted time limit.
+// It returns the Metrics-wrapped result and 'true' if the operation was completed before the timeout,
+// or the zero Metrics value and 'false' otherwise.
 func TaskWIthTimeout[T Metrics](timeout time.Duration, f func() T) (T, bool) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
