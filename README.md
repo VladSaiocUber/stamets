@@ -1,5 +1,7 @@
 # STAMETS - STatic Analysis METricS
 
+[![Go Report Card](https://goreportcard.com/report/github.com/vladsaiocuber/stamets)](https://goreportcard.com/report/github.com/vladsaiocuber/stamets) [![PkgGoDev](https://pkg.go.dev/github.com/vladsaiocuber/stamets)](https://pkg.go.dev/github.com/vladsaiocuber/stamets)
+
 For programming language experts that rely on standard library static analyzers.
 Requires Go 1.20
 
@@ -49,7 +51,7 @@ ptaMetrics := stamets.Analyze(config)
 // 2. Unpack original results
 ptaResults, err ptaMetrics := ptaMetrics.Unpack()
 // 3. (Optional) Print metrics to stdout
-fmt.Println(ptaMetrics)
+fmt.Println(ptaMetrics.String())
 ```
 
 The call graph produced by PTA may have its metrics extracted as follows:

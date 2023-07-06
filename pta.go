@@ -45,6 +45,14 @@ PTA METRICS
 	)
 }
 
+// AnalyzeWithTimeout runs the points-to analysis with the given configuration in the alloted time limit,
+// collecting metrics i.e., duration and information about the call graph.
+func AnalyzeWithTimeout(t time.Duration, config *pointer.Config) (PTAMetrics, bool) {
+	return TaskWIthTimeout(t, func() PTAMetrics {
+		return Analyze(config)
+	})
+}
+
 // Analyze runs the points-to analysis with the given configuration,
 // collecting metrics i.e., duration and information about the call graph.
 func Analyze(config *pointer.Config) PTAMetrics {
