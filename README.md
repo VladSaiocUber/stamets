@@ -49,7 +49,7 @@ import "github.com/vladsaiocuber/stamets"
 // 1. Replace pointer.Analyze with stamets.Analyze
 ptaMetrics := stamets.Analyze(config)
 // 2. Unpack original results
-ptaResults, err ptaMetrics := ptaMetrics.Unpack()
+ptaResults, err := ptaMetrics.Unpack()
 // 3. (Optional) Print metrics to stdout
 fmt.Println(ptaMetrics.String())
 ```
