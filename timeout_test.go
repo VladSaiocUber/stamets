@@ -8,7 +8,7 @@ import (
 )
 
 func TestTimeout(t *testing.T) {
-	m, ok := TaskWIthTimeout(time.Second, func() BaseMetrics[string] {
+	m, ok := TaskWithTimeout(time.Second, func() BaseMetrics[string] {
 		return BaseMetrics[string]{
 			Payload: "I made it",
 		}
@@ -18,7 +18,7 @@ func TestTimeout(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, msg, "I made it")
 
-	m, ok = TaskWIthTimeout(100*time.Millisecond, func() BaseMetrics[string] {
+	m, ok = TaskWithTimeout(100*time.Millisecond, func() BaseMetrics[string] {
 		select {
 		case <-time.After(3 * time.Second):
 			t.FailNow()

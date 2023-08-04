@@ -17,11 +17,11 @@ func PackagesLoad(config *packages.Config, query string) BaseMetrics[[]*packages
 	pkgs, err := packages.Load(config, query)
 	if err != nil {
 		return BaseMetrics[[]*packages.Package]{
-			error: err,
+			err: err,
 		}
 	} else if packages.PrintErrors(pkgs) > 0 {
 		return BaseMetrics[[]*packages.Package]{
-			error: errors.New("errors encountered while loading packages"),
+			err: errors.New("errors encountered while loading packages"),
 		}
 	}
 	if config.Tests {
@@ -53,7 +53,7 @@ func PackagesLoad(config *packages.Config, query string) BaseMetrics[[]*packages
 // the alloted time limit, and further filters them with `query`. It performs additional
 // filtering when the configuration includes test packages.
 func PackagesLoadWithTimeout(t time.Duration, config *packages.Config, query string) (BaseMetrics[[]*packages.Package], bool) {
-	return TaskWIthTimeout(t, func() BaseMetrics[[]*packages.Package] {
+	return TaskWithTimeout(t, func() BaseMetrics[[]*packages.Package] {
 		return PackagesLoad(config, query)
 	})
 }

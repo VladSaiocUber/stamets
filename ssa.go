@@ -25,7 +25,7 @@ func AllPackages(pkgs []*packages.Package, mode ssa.BuilderMode) BaseMetrics[*ss
 // AllPackagesWithTimeout builds a list of packages as an SSA program in the alloted time limit.
 // It also invokes .Build() on the produced SSA program.
 func AllPackagesWithTimeout(t time.Duration, pkgs []*packages.Package, mode ssa.BuilderMode) (BaseMetrics[*ssa.Program], bool) {
-	return TaskWIthTimeout(t, func() BaseMetrics[*ssa.Program] {
+	return TaskWithTimeout(t, func() BaseMetrics[*ssa.Program] {
 		return AllPackages(pkgs, mode)
 	})
 }

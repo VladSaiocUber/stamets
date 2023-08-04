@@ -9,12 +9,16 @@ import (
 	"golang.org/x/tools/go/pointer"
 )
 
-// PTAMetrics aggregates important metrics about the Points-To
-// analysis.
+// PTAMetrics aggregates important metrics about the points-to analysis.
 type PTAMetrics struct {
 	BaseMetrics[*pointer.Result]
 
+	Queries         int
+	IndirectQueries int
+
 	// Aliasing metrics
+
+	// Maximum points-to set size.
 	PointsToSetSizeMax  int
 	PointsToSetSizeP50  int
 	PointsToSetSizeP90  int
@@ -35,8 +39,8 @@ PTA METRICS
 - Most common points-to set size: %d
 `,
 		m.Duration.Seconds(),
-		len(m.Payload.Queries),
-		len(m.Payload.IndirectQueries),
+		m.Queries,
+		m.IndirectQueries,
 		m.PointsToSetSizeP50,
 		m.PointsToSetSizeP90,
 		m.PointsToSetSizeP99,
@@ -48,7 +52,7 @@ PTA METRICS
 // AnalyzeWithTimeout runs the points-to analysis with the given configuration in the alloted time limit,
 // collecting metrics i.e., duration and information about the call graph.
 func AnalyzeWithTimeout(t time.Duration, config *pointer.Config) (PTAMetrics, bool) {
-	return TaskWIthTimeout(t, func() PTAMetrics {
+	return TaskWithTimeout(t, func() PTAMetrics {
 		return Analyze(config)
 	})
 }
@@ -62,7 +66,7 @@ func Analyze(config *pointer.Config) PTAMetrics {
 	if err != nil {
 		return PTAMetrics{
 			BaseMetrics: BaseMetrics[*pointer.Result]{
-				error: err,
+				err: err,
 			},
 		}
 	}
@@ -75,6 +79,8 @@ func Analyze(config *pointer.Config) PTAMetrics {
 	}
 
 	m = m.PointsToSetMetrics()
+	m.Queries = len(m.Payload.Queries)
+	m.IndirectQueries = len(m.Payload.IndirectQueries)
 
 	return m
 }

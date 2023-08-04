@@ -8,8 +8,12 @@ import (
 	"golang.org/x/tools/go/ssa"
 )
 
+// CallGraphMetrics encodes metrics about call graphs e.g.
+// as collected by a PTA/RTA analysis.
 type CallGraphMetrics struct {
 	BaseMetrics[*callgraph.Graph]
+
+	Functions int
 
 	// Call graph out degree metrics
 	OutDegreeMax  int
@@ -57,6 +61,7 @@ Callee in-degree metrics:
 	)
 }
 
+// GetCallGraphMetrics constructs metrics from a given call graph.
 func GetCallGraphMetrics(cg *callgraph.Graph) CallGraphMetrics {
 	m := CallGraphMetrics{
 		BaseMetrics: BaseMetrics[*callgraph.Graph]{
@@ -66,6 +71,7 @@ func GetCallGraphMetrics(cg *callgraph.Graph) CallGraphMetrics {
 
 	m = m.CallGraphInDegreeMetrics()
 	m = m.CallGraphOutDegreeMetrics()
+	m.Functions = len(cg.Nodes)
 	return m
 }
 
@@ -142,7 +148,7 @@ func (m CallGraphMetrics) CallGraphInDegreeMetrics() CallGraphMetrics {
 // by the Points-To analysis.
 func (m CallGraphMetrics) NumberOfFunctions() int {
 	if m.Payload == nil {
-		return 0
+		return m.Functions
 	}
 
 	return len(m.Payload.Nodes)
